@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>Te Amo Vitória</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background-color: pink;
+      overflow: hidden;
+      position: relative;
+      font-family: 'Dancing Script', cursive;
+    }
+
+    .frase-central {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 72px;
+      font-weight: normal;
+      color: white;
+      text-shadow: 2px 2px 8px #d6006f;
+      z-index: 2;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.05); }
+    }
+
+    .fundo-palavras {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    .fundo-palavras span {
+      position: absolute;
+      font-size: 18px;
+      color: #00000033;
+      pointer-events: none;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .explosao {
+      position: absolute;
+      font-size: 22px;
+      color: red;
+      font-weight: bold;
+      font-family: 'Arial', sans-serif;
+      animation: explodir 1s ease-out forwards;
+      z-index: 3;
+    }
+
+    @keyframes explodir {
+      0% {
+        transform: translate(0, 0);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--x), var(--y)) scale(0.5);
+        opacity: 0;
+      }
+    }
+
+    .coracao {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      transform: rotate(45deg);
+      animation: flutuar 8s linear infinite;
+      opacity: 0.6;
+    }
+
+    .coracao::before,
+    .coracao::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: red;
+      border-radius: 50%;
+    }
+
+    .coracao::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .coracao::after {
+      left: -10px;
+      top: 0;
+    }
+
+    @keyframes flutuar {
+      0% {
+        transform: translateY(100vh) rotate(45deg);
+        opacity: 0;
+      }
+      50% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-10vh) rotate(45deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="fundo-palavras" id="fundo"></div>
+  <div class="frase-central">EU TE AMO</div>
+
+  <script>
+    // Fundo com muitas frases "eu te amo vitória"
+    const fundo = document.getElementById('fundo');
+    for (let i = 0; i < 600; i++) {
+      const span = document.createElement('span');
+      span.textContent = 'eu te amo vitória';
+      span.style.left = `${Math.random() * 100}%`;
+      span.style.top = `${Math.random() * 100}%`;
+      span.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
+      fundo.appendChild(span);
+    }
+
+    // Corações flutuantes
+    for (let i = 0; i < 40; i++) {
+      const coracao = document.createElement('div');
+      coracao.className = 'coracao';
+      coracao.style.left = `${Math.random() * 100}vw`;
+      coracao.style.animationDuration = `${5 + Math.random() * 5}s`;
+      coracao.style.animationDelay = `${Math.random() * 5}s`;
+      document.body.appendChild(coracao);
+    }
+
+    // Explosão ao clicar
+    document.body.addEventListener('click', (e) => {
+      for (let i = 0; i < 20; i++) {
+        const span = document.createElement('span');
+        span.className = 'explosao';
+        span.textContent = 'eu te amo';
+        span.style.left = `${e.clientX}px`;
+        span.style.top = `${e.clientY}px`;
+
+        const angle = Math.random() * 2 * Math.PI;
+        const distance = Math.random() * 200;
+        span.style.setProperty('--x', `${Math.cos(angle) * distance}px`);
+        span.style.setProperty('--y', `${Math.sin(angle) * distance}px`);
+
+        document.body.appendChild(span);
+
+        setTimeout(() => {
+          span.remove();
+        }, 1000);
+      }
+    });
+  </script>
+</body>
+</html>
